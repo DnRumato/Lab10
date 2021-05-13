@@ -1,0 +1,11 @@
+  23445 Uzbek      8 4.4
+  23475 Debil      2   1
+  34245 Oiduraak   2 1.1
+  43556 Genichist  5 9.9
+  45479 Namasita   7 9.3
+  45611 Soloviov   4 8.3
+  45674 Memolol    7   9
+  49837 Ahahah     4 6.2
+  56883 Mel        7 9.1
+  84759 Ahuhmed    4 7.3
+1004988 Dukarovia 14 1.1
