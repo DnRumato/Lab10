@@ -19,19 +19,19 @@ int main() {
 } */
 
 int main() {
-  std::string fileName = "";
+  std::string file_name = "";
   StudContainer first, second, res;
   int choise = -1;
   do {
-    std::cout << "First file\n1) classic in\n2) binary in\nSelect an "
+    std::cout << "First file\n1) text in\n2) binary in\nSelect an "
                  "action: ";
     std::cin >> choise;
     switch (choise) {
       case 1: {
         std::cout << "Input first file name:  ";
-        std::string fileName = "";
-        std::cin >> fileName;
-        std::ifstream input(fileName);
+        std::string file_name = "";
+        std::cin >> file_name;
+        std::ifstream input(file_name);
         if (!input.is_open()) {
           std::cout << "Error...\n";
           return 1;
@@ -44,9 +44,9 @@ int main() {
       }
       case 2: {
         std::cout << "Input first file name:  ";
-        std::string fileName = "";
-        std::cin >> fileName;
-        std::ifstream input(fileName, std::ios::binary);
+        std::string file_name = "";
+        std::cin >> file_name;
+        std::ifstream input(file_name, std::ios::binary);
         if (!input.is_open()) {
           std::cout << "Error...\n";
           return 1;
@@ -62,15 +62,15 @@ int main() {
   } while (choise < 0);
   choise = -1;
   do {
-    std::cout << "Second file\n1) classic in\n2) binary in\nSelect an "
+    std::cout << "Second file\n1) text in\n2) binary in\nSelect an "
                  "action: ";
     std::cin >> choise;
     switch (choise) {
       case 1: {
         std::cout << "Input second file name:  ";
-        std::string fileName = "";
-        std::cin >> fileName;
-        std::ifstream input(fileName);
+        std::string file_name = "";
+        std::cin >> file_name;
+        std::ifstream input(file_name);
         if (!input.is_open()) {
           std::cout << "Error...\n";
           return 1;
@@ -83,9 +83,9 @@ int main() {
       }
       case 2: {
         std::cout << "Input second file name:  ";
-        std::string fileName = "";
-        std::cin >> fileName;
-        std::ifstream input(fileName, std::ios::binary);
+        std::string file_name = "";
+        std::cin >> file_name;
+        std::ifstream input(file_name, std::ios::binary);
         if (!input.is_open()) {
           std::cout << "Error...\n";
           return 1;
@@ -141,7 +141,7 @@ int main() {
   } while (choise < 0);
   choise = -1;
   do {
-    std::cout << "1) classic out\n2) binary out\nSelect "
+    std::cout << "1) text out\n2) binary out\nSelect "
                  "an action: ";
     std::cin >> choise;
     switch (choise) {

@@ -1,7 +1,7 @@
-//Container1
 #define _CRT_SECURE_NO_WARNINGS
 #include "Student.h"
 #include <fstream>
+#include <sstream>
 #include <vector>
 #include <ostream>
 #include <iostream>
@@ -33,42 +33,16 @@ bool operator==(const Student& left, const Student& right) {
 std::istream& operator>>(std::istream& in, Student& s) {
   std::string str;
   std::getline(in, str, '\n');
-  int numb = 0, i = 0, j = 0;
-  for (; i < 7; ++i) {
-    int tmp = str[i] - 48;
-    numb = numb * 10 + tmp;
-  }
-  s.num = numb;
-  ++i;
-  for (; i < 18; ++i) {
-    s.name[j] = str[i];
-    ++j;
-  }
-  if (j < 9) {
-    s.name[j] = '\n';
-  } else {
-    s.name[9] = '\n';
-  }
-  numb = 0;
-  ++i;
-  for (; i < 21; ++i) {
-    if (str[i] == ' ') {
-      ++i;
-    }
-    int tmp = str[i] - 48;
-    numb = numb * 10 + tmp;
-  }
-  s.group = numb;
-  numb = str[i + 1] - 48;
-  int numb2 = str[i + 3] - 48;
-  s.grade = numb + numb2 / static_cast<double>(10);
+  std::stringstream sstream(str);
+  sstream >> s.num >> s.name >> s.grade >> s.group;
+
   return in;
 }
 
 std::ostream& operator<<(std::ostream& out, const Student& s) {
   out << std::setw(7) << s.num << " ";
   int counter = 0;
-  for (int i = 0; s.name[i] != '\n'; ++i) {
+  for (int i = 0; i < 10; ++i) {
     out << s.name[i];
     ++counter;
   }
@@ -100,7 +74,6 @@ StudContainer::StudContainer(const StudContainer& s) { rep = s.rep; }
 int StudContainer::size() { return rep.size(); }
 
 StudContainer operator+(StudContainer const& left, StudContainer const& right) {
-  int resSize = left.rep.size() + right.rep.size();
   StudContainer res;
   for (unsigned int i = 0; i < left.rep.size(); i++) {
     res.rep.push_back(left.rep[i]);
@@ -135,13 +108,13 @@ StudContainer operator*(StudContainer const& left, StudContainer const& right) {
 StudContainer operator-(StudContainer const& left, StudContainer const& right) {
   StudContainer res;
   Student tmp;
-  for (size_t i = 0; i < right.rep.size(); i++) {
-    tmp = right.rep[i];
-    if (std::find_if(left.rep.begin(), left.rep.end(), [tmp](Student term) {
+  for (size_t i = 0; i < left.rep.size(); i++) {
+    tmp = left.rep[i];
+    if (std::find_if(right.rep.begin(), right.rep.end(), [tmp](Student term) {
           return (tmp == term);
         }) ==
-        left.rep.end()) {
-      res.rep.push_back(right.rep[i]);
+        right.rep.end()) {
+      res.rep.push_back(left.rep[i]);
     }
   }
   return res;
