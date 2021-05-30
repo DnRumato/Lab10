@@ -152,6 +152,7 @@ int main() {
           return 1;
         }
         out << res;
+        break;
       }
       case 2: {
         std::ofstream out("output.bin", std::ios::binary);

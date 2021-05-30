@@ -2,6 +2,7 @@
 #include "Student.h"
 #include <fstream>
 #include <sstream>
+#include <cstddef>
 #include <vector>
 #include <ostream>
 #include <iostream>
@@ -16,7 +17,7 @@ bool operator==(const Student& left, const Student& right) {
   if (left.name[0] != right.name[0]) {
     return false;
   }
-  for (int i = 1; left.name[i - 1] != '\n'; ++i) {
+  for (int i = 1; i < 10; ++i) {
     if (left.name[i] != right.name[i]) {
       return false;
     }
@@ -31,14 +32,16 @@ bool operator==(const Student& left, const Student& right) {
 }
 
 std::istream& operator>>(std::istream& in, Student& s) {
-  std::string str;
+  std::string str, tmp_name;
   std::getline(in, str, '\n');
   std::stringstream sstream(str);
-  sstream >> s.num >> s.name >> s.grade >> s.group;
-
+  sstream >> s.num >> tmp_name >> s.grade >> s.group;
+  std::cout << tmp_name.size();
+  for (int i = 0; i < tmp_name.size(); ++i) {
+    s.name[i] = tmp_name[i];
+  }
   return in;
 }
-
 std::ostream& operator<<(std::ostream& out, const Student& s) {
   out << std::setw(7) << s.num << " ";
   int counter = 0;
@@ -51,8 +54,11 @@ std::ostream& operator<<(std::ostream& out, const Student& s) {
 }
 
 std::istream& operator>>(std::istream& in, StudContainer& s) {
+  Student st;
   while (!in.eof()) {
-    Student st;
+    for (int i = 0; i < 10; ++i) {
+      st.name[i] = ' ';
+    }
     in >> st;
     s.rep.push_back(st);
   }
@@ -95,7 +101,8 @@ StudContainer operator*(StudContainer const& left, StudContainer const& right) {
   Student tmp;
   for (size_t i = 0; i < right.rep.size(); i++) {
     tmp = right.rep[i];
-    if (std::find_if(left.rep.begin(), left.rep.end(), [tmp](Student term) {
+    if (std::find_if(left.rep.begin(), left.rep.end(),
+                     [tmp](Student term) -> bool {
           return (tmp == term);
         }) !=
         left.rep.end()) {
@@ -110,7 +117,8 @@ StudContainer operator-(StudContainer const& left, StudContainer const& right) {
   Student tmp;
   for (size_t i = 0; i < left.rep.size(); i++) {
     tmp = left.rep[i];
-    if (std::find_if(right.rep.begin(), right.rep.end(), [tmp](Student term) {
+    if (std::find_if(right.rep.begin(), right.rep.end(),
+                     [tmp](Student term) -> bool {
           return (tmp == term);
         }) ==
         right.rep.end()) {
@@ -126,7 +134,8 @@ void StudContainer::operator=(const StudContainer& other) {
 
 StudContainer StudContainer::sort_by_num() {
   StudContainer res = *this;
-  sort(res.rep.begin(), res.rep.end(), [](Student a, Student b) { return a.num < b.num; });
+  sort(res.rep.begin(), res.rep.end(),
+       [](Student a, Student b) -> bool { return a.num < b.num; });
   return res;
 }
 
@@ -142,7 +151,7 @@ StudContainer StudContainer::sort_by_name() {
 
 StudContainer StudContainer::sort_by_group() {
   StudContainer res = *this;
-  sort(res.rep.begin(), res.rep.end(), [](Student a, Student b) {
+  sort(res.rep.begin(), res.rep.end(), [](Student a, Student b) -> bool {
     if (a.group == b.group) {
       return (strcmp(a.name, b.name) == -1);
     }
@@ -152,7 +161,8 @@ StudContainer StudContainer::sort_by_group() {
 }
 
 void StudContainer::write_bin(std::ofstream& out) {
-    out.write((char*)&rep[0], sizeof(Student) * rep.size()); 
+  int size = sizeof(Student) * rep.size();
+  out.write((char*)&rep[0], size);
 }
 
 void StudContainer::read_bin(std::ifstream& in) {
@@ -165,5 +175,6 @@ void StudContainer::read_bin(std::ifstream& in) {
     count /= sizeof(Student);
     in.seekg(std::ios::beg);
     rep.resize(count);
-    in.read((char*)&rep[0], sizeof(Student) * count);
+    int size = sizeof(Student) * rep.size();
+    in.read((char*)&rep[0], size);
 }
